@@ -46,7 +46,7 @@ public class AuthServiceImpl implements AuthService {
                 "</div>";
 
 
-        new Thread(() -> mailService.sendMail(email, subject, body)).start();
+        mailService.sendMail(email, subject, body);
     }
 
     @Override
