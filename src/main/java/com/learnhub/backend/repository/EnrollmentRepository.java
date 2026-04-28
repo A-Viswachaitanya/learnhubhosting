@@ -1,10 +1,11 @@
 package com.learnhub.backend.repository;
 
-import com.learnhub.backend.entity.Enrollment;
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
+import com.learnhub.backend.entity.Enrollment;
 
 @Repository
 public interface EnrollmentRepository extends JpaRepository<Enrollment, Long> {

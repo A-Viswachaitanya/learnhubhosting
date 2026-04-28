@@ -1,5 +1,19 @@
 package com.learnhub.backend.controller;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.modelmapper.ModelMapper;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.learnhub.backend.dto.SubmissionDTO;
 import com.learnhub.backend.entity.CourseContent;
 import com.learnhub.backend.entity.Submission;
@@ -8,13 +22,8 @@ import com.learnhub.backend.repository.CourseContentRepository;
 import com.learnhub.backend.repository.SubmissionRepository;
 import com.learnhub.backend.repository.UserRepository;
 import com.learnhub.backend.service.MailService;
-import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.stream.Collectors;
+import lombok.RequiredArgsConstructor;
 
 @CrossOrigin("*")
 @RestController
@@ -31,14 +40,14 @@ public class SubmissionController {
     public ResponseEntity<SubmissionDTO> submitAssignment(@RequestBody SubmissionDTO dto) {
         User user = userRepository.findById(dto.getUserId()).orElseThrow();
         CourseContent assignment = contentRepository.findById(dto.getAssignmentId()).orElseThrow();
-        
+
         Submission sub = new Submission();
         sub.setUser(user);
         sub.setAssignment(assignment);
         sub.setContent(dto.getContent());
-        
+
         Submission saved = submissionRepository.save(sub);
-        
+
         // Send submission confirmation email to student
         String studentEmail = user.getEmail();
         String studentName = user.getName();
@@ -90,7 +99,7 @@ public class SubmissionController {
                 .collect(Collectors.toList());
         return ResponseEntity.ok(dtos);
     }
-    
+
     @PutMapping("/{id}/grade")
     public ResponseEntity<SubmissionDTO> gradeSubmission(@PathVariable Long id, @RequestBody SubmissionDTO dto) {
         Submission sub = submissionRepository.findById(id).orElseThrow();
@@ -109,8 +118,11 @@ public class SubmissionController {
         String subject = "Your assignment has been graded - LearnHub";
         String gradeColor = "#4F46E5";
         try {
-            if (Double.parseDouble(grade) >= 50) gradeColor = "#10B981";
-            else gradeColor = "#EF4444";
+            if (Double.parseDouble(grade) >= 50) {
+				gradeColor = "#10B981";
+			} else {
+				gradeColor = "#EF4444";
+			}
         } catch(Exception ignored) {}
 
         String body = "<div style='font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #e5e7eb; border-radius: 10px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);'>" +

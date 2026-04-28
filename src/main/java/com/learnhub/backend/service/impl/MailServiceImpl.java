@@ -1,11 +1,13 @@
 package com.learnhub.backend.service.impl;
 
-import com.learnhub.backend.service.MailService;
 import org.springframework.beans.factory.annotation.Autowired;
-import jakarta.mail.internet.MimeMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
+
+import com.learnhub.backend.service.MailService;
+
+import jakarta.mail.internet.MimeMessage;
 
 @Service
 public class MailServiceImpl implements MailService {

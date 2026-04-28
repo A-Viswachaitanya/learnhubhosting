@@ -1,17 +1,5 @@
 package com.learnhub.backend.service.impl;
 
-import com.learnhub.backend.config.StorageProperties;
-import com.learnhub.backend.exception.StorageException;
-import com.learnhub.backend.exception.StorageFileNotFoundException;
-import com.learnhub.backend.service.StorageService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.UrlResource;
-import org.springframework.stereotype.Service;
-import org.springframework.util.FileSystemUtils;
-import org.springframework.web.multipart.MultipartFile;
-
-import jakarta.annotation.PostConstruct;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
@@ -21,6 +9,20 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.UUID;
 import java.util.stream.Stream;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
+import org.springframework.stereotype.Service;
+import org.springframework.util.FileSystemUtils;
+import org.springframework.web.multipart.MultipartFile;
+
+import com.learnhub.backend.config.StorageProperties;
+import com.learnhub.backend.exception.StorageException;
+import com.learnhub.backend.exception.StorageFileNotFoundException;
+import com.learnhub.backend.service.StorageService;
+
+import jakarta.annotation.PostConstruct;
 
 @Service
 public class FileSystemStorageService implements StorageService {
@@ -55,7 +57,7 @@ public class FileSystemStorageService implements StorageService {
             String originalFilename = file.getOriginalFilename();
             String extension = originalFilename != null && originalFilename.contains(".") ? originalFilename.substring(originalFilename.lastIndexOf(".")) : "";
             String generatedFilename = UUID.randomUUID().toString() + extension;
-            
+
             Path destinationFile = this.rootLocation.resolve(
                     Paths.get(generatedFilename))
                     .normalize().toAbsolutePath();

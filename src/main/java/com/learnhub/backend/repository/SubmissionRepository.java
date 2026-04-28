@@ -1,7 +1,9 @@
 package com.learnhub.backend.repository;
-import com.learnhub.backend.entity.Submission;
-import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.learnhub.backend.entity.Submission;
 public interface SubmissionRepository extends JpaRepository<Submission, Long> {
     List<Submission> findByUserId(Long userId);
     List<Submission> findByAssignmentId(Long assignmentId);

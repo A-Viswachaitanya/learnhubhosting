@@ -1,17 +1,27 @@
 package com.learnhub.backend.controller;
 
-import com.learnhub.backend.exception.StorageFileNotFoundException;
-import com.learnhub.backend.service.StorageService;
-import lombok.RequiredArgsConstructor;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.util.HashMap;
-import java.util.Map;
+import com.learnhub.backend.exception.StorageFileNotFoundException;
+import com.learnhub.backend.service.StorageService;
+
+import lombok.RequiredArgsConstructor;
 
 @CrossOrigin("*")
 @RestController
@@ -28,7 +38,7 @@ public class FileUploadController {
                 .path("/api/files/")
                 .path(filename)
                 .toUriString();
-        
+
         Map<String, String> response = new HashMap<>();
         response.put("filename", filename);
         response.put("url", fileDownloadUri);
@@ -40,8 +50,9 @@ public class FileUploadController {
     @ResponseBody
     public ResponseEntity<Resource> serveFile(@PathVariable String filename) {
         Resource file = storageService.loadAsResource(filename);
-        if (file == null)
-            return ResponseEntity.notFound().build();
+        if (file == null) {
+			return ResponseEntity.notFound().build();
+		}
 
         org.springframework.http.MediaType contentType = org.springframework.http.MediaTypeFactory.getMediaType(file)
                 .orElse(org.springframework.http.MediaType.APPLICATION_OCTET_STREAM);

@@ -1,7 +1,8 @@
 package com.learnhub.backend.service;
 
-import com.learnhub.backend.dto.UserDTO;
 import java.util.List;
+
+import com.learnhub.backend.dto.UserDTO;
 
 public interface UserService {
     UserDTO createUser(UserDTO userDTO);

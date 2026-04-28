@@ -1,17 +1,19 @@
 package com.learnhub.backend.service.impl;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.modelmapper.ModelMapper;
+import org.springframework.stereotype.Service;
+
 import com.learnhub.backend.dto.CourseDTO;
 import com.learnhub.backend.entity.Course;
 import com.learnhub.backend.entity.User;
 import com.learnhub.backend.repository.CourseRepository;
 import com.learnhub.backend.repository.UserRepository;
 import com.learnhub.backend.service.CourseService;
-import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
-import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.stream.Collectors;
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
@@ -24,7 +26,7 @@ public class CourseServiceImpl implements CourseService {
     @Override
     public CourseDTO createCourse(CourseDTO courseDTO) {
         Course course = modelMapper.map(courseDTO, Course.class);
-        
+
         // If a userId is provided, fetch the actual user and attach it to strictly enforce the ManyToOne relation
         if (courseDTO.getUserId() != null) {
             User instructor = userRepository.findById(courseDTO.getUserId())
@@ -54,9 +56,9 @@ public class CourseServiceImpl implements CourseService {
     public CourseDTO updateCourse(Long id, CourseDTO courseDTO) {
         Course course = courseRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Course not found"));
-        
+
         course.setTitle(courseDTO.getTitle());
-        
+
         if (courseDTO.getUserId() != null) {
             User instructor = userRepository.findById(courseDTO.getUserId())
                     .orElseThrow(() -> new RuntimeException("Instructor User not found"));

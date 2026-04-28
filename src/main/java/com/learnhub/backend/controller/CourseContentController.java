@@ -1,5 +1,20 @@
 package com.learnhub.backend.controller;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.modelmapper.ModelMapper;
+import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.learnhub.backend.dto.CourseContentDTO;
 import com.learnhub.backend.entity.Course;
 import com.learnhub.backend.entity.CourseContent;
@@ -7,14 +22,8 @@ import com.learnhub.backend.repository.CourseContentRepository;
 import com.learnhub.backend.repository.CourseRepository;
 import com.learnhub.backend.repository.SubmissionRepository;
 import com.learnhub.backend.service.StorageService;
-import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
-import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.stream.Collectors;
+import lombok.RequiredArgsConstructor;
 
 @CrossOrigin("*")
 @RestController
@@ -48,7 +57,7 @@ public class CourseContentController {
     @Transactional
     public ResponseEntity<Void> deleteContent(@PathVariable Long id) {
         contentRepository.findById(id).ifPresent(content -> {
-            
+
             // 1. Delete all attached submissions and their files first (prevent Foreign Key crashes!)
             submissionRepository.findByAssignmentId(id).forEach(sub -> {
                 try {
@@ -59,7 +68,7 @@ public class CourseContentController {
                 } catch (Exception ignored) {} // Catch OS file-locking on Windows to prevent cascade failures
                 submissionRepository.delete(sub);
             });
-            
+
             // Force flush so database constraint is cleared before we delete the parent
             submissionRepository.flush();
 
@@ -70,7 +79,7 @@ public class CourseContentController {
                     storageService.delete(filename);
                 }
             } catch (Exception ignored) {} // Catch OS file-locking on Windows
-            
+
             // 3. Delete the parent course content record
             contentRepository.delete(content);
         });

@@ -1,7 +1,8 @@
 package com.learnhub.backend.service;
 
-import com.learnhub.backend.dto.CourseDTO;
 import java.util.List;
+
+import com.learnhub.backend.dto.CourseDTO;
 
 public interface CourseService {
     CourseDTO createCourse(CourseDTO courseDTO);

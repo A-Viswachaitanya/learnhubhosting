@@ -1,14 +1,15 @@
 package com.learnhub.backend.service;
 
-import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
+import java.util.Map;
+
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import java.util.Map;
+import org.springframework.stereotype.Service;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.RestTemplate;
 
 @Service
 public class RecaptchaService {
@@ -16,7 +17,9 @@ public class RecaptchaService {
     private static final String VERIFY_URL = "https://www.google.com/recaptcha/api/siteverify";
 
     public boolean verifyCaptcha(String token) {
-        if (token == null || token.isEmpty()) return false;
+        if (token == null || token.isEmpty()) {
+			return false;
+		}
         try {
             RestTemplate restTemplate = new RestTemplate();
             HttpHeaders headers = new HttpHeaders();
@@ -30,7 +33,9 @@ public class RecaptchaService {
             ResponseEntity<Map> response = restTemplate.postForEntity(VERIFY_URL, request, Map.class);
 
             Map<String, Object> body = response.getBody();
-            if (body == null) return false;
+            if (body == null) {
+				return false;
+			}
             return (Boolean) body.getOrDefault("success", false);
         } catch (Exception e) {
             System.err.println("Recaptcha verification failed: " + e.getMessage());

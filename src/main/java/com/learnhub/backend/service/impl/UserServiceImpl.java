@@ -1,15 +1,17 @@
 package com.learnhub.backend.service.impl;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.modelmapper.ModelMapper;
+import org.springframework.stereotype.Service;
+
 import com.learnhub.backend.dto.UserDTO;
 import com.learnhub.backend.entity.User;
 import com.learnhub.backend.repository.UserRepository;
 import com.learnhub.backend.service.UserService;
-import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
-import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.stream.Collectors;
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
